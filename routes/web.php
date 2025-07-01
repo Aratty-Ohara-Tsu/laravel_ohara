@@ -1,9 +1,25 @@
 <?php
 
 //use文。このファイル内で扱うクラスをインポートするための機能。
+use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
+
+//お問い合わせフォーム用ルート
+// Route::get('/contacts', [ContactFormController::class, 'index'])->name('contacts.index');
+//リソースコントローラ用のまとめてルート作成
+// Route::resource('contacts', ContactFormController::class);
+
+
+Route::prefix('contacts') // 頭に contacts をつける ​
+    ->middleware(['auth']) // 認証 ​
+    ->name('contacts.') // ルート名 ​
+    ->controller(ContactFormController::class) // コントローラ指定 ​
+    ->group(function () { // グループ化 ​
+        Route::get('/', 'index')->name('index'); // index 
+        Route::get('/create', 'create')->name('create'); //crate
+    });
 
 //テスト用ルーティング
 // ルートには名前を付けることができる。名前を付けておくと、リンクを張るときに便利。
