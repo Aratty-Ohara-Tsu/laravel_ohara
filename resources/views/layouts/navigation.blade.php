@@ -12,11 +12,11 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        管理画面テスト１
+                    <x-nav-link :href="route('contacts.index')" :active="request()->routeIs('contacts.index')">
+                        HOME
                     </x-nav-link>
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        管理画面テスト２
+                    <x-nav-link :href="route('contacts.create')" :active="request()->routeIs('contacts.create')">
+                        お問い合わせフォーム
                     </x-nav-link>
                 </div>
             </div>
