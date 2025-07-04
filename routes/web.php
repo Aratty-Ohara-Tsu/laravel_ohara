@@ -19,7 +19,10 @@ Route::prefix('contacts') // 頭に contacts をつける ​
     ->group(function () { // グループ化 ​
         Route::get('/', 'index')->name('index'); // index 
         Route::get('/create', 'create')->name('create'); //crate
-        Route::post('/', 'store')->name('store'); //crate
+        Route::post('/', 'store')->name('store'); //store
+        Route::get('/{id}', 'show')->name('show'); // show 
+        Route::get('/{id}/edit', 'edit')->name('edit'); // edit 
+        Route::post('/{id}', 'update')->name('update'); //update
     });
 
 //テスト用ルーティング

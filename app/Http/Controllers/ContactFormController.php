@@ -56,7 +56,18 @@ class ContactFormController extends Controller
      */
     public function show(string $id)
     {
-        //
+        //find　⇒　1件データを取得。データが存在しない場合エラー
+        //findOrFail ⇒　1件データを取得。データが存在しない場合は404
+        $contact = ContactForm::findOrFail($id);
+
+        //性別の表記処理
+        if ($contact->gender === 0) {
+            $gender = '男性';
+        } else {
+            $gender = '女性';
+        }
+
+        return view("contacts.show", compact('contact', 'gender'));
     }
 
     /**
@@ -65,6 +76,15 @@ class ContactFormController extends Controller
     public function edit(string $id)
     {
         //
+        $contact = ContactForm::findOrFail($id);
+
+        if ($contact->gender === 0) {
+            $gender = '男性';
+        } else {
+            $gender = '女性';
+        }
+
+        return view("contacts.edit", compact('contact', 'gender'));
     }
 
     /**
@@ -72,7 +92,20 @@ class ContactFormController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        //現在の情報をＤＢから取得
+        $before_contact = ContactForm::findOrFail($id);
+        //　フォームで送信されたデータ($request)で現在の情報を上書き
+        // 現在の名前にフォームで送信された名前を代入
+        $before_contact->name = $request->name;
+        $before_contact->title = $request->title;
+        $before_contact->email = $request->email;
+        $before_contact->url = $request->url;
+        $before_contact->gender = $request->gender;
+        $before_contact->age = $request->age;
+        $before_contact->contact = $request->contact;
+        $before_contact->save();
+
+        return to_route('contacts.index');
     }
 
     /**
