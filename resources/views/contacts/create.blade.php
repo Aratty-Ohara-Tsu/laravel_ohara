@@ -10,7 +10,19 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    {{-- バリデーションメッセージ表示 --}}
+                    {{-- $errors⇒バリデーション用変数。viewファイルのどこでも使うことができる --}}
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     {{-- フォーム開始 --}}
+
                     <form action="{{ route('contacts.store') }}" method="post">
                         @csrf
                         <section class="text-gray-600 body-font relative">
@@ -27,7 +39,8 @@
                                             <div class="relative">
                                                 <label for="name"
                                                     class="leading-7 text-sm text-gray-600">お名前</label>
-                                                <input type="text" id="name" name="name"
+                                                <input type="text" id="name" name="name" placeholder="例）日本太郎"
+                                                    value="{{ old('name') }}"
                                                     class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                             </div>
                                         </div>
@@ -36,6 +49,7 @@
                                             <div class="relative">
                                                 <label for="title" class="leading-7 text-sm text-gray-600">件名</label>
                                                 <input type="text" id="title" name="title"
+                                                    placeholder="例）七夕でしたね" value="{{ old('title') }}"
                                                     class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                             </div>
                                         </div>
@@ -45,6 +59,7 @@
                                                 <label for="email"
                                                     class="leading-7 text-sm text-gray-600">メールアドレス</label>
                                                 <input type="email" id="email" name="email"
+                                                    placeholder="example@example.com" value="{{ old('email') }}"
                                                     class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                             </div>
                                         </div>
@@ -54,6 +69,7 @@
                                                 <label for="url"
                                                     class="leading-7 text-sm text-gray-600">URL</label>
                                                 <input type="url" id="url" name="url"
+                                                    placeholder="http://example.com" value="{{ old('url') }}"
                                                     class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                             </div>
                                         </div>
@@ -62,9 +78,9 @@
                                             <div class="relative">
                                                 <label for="gender" class="leading-7 text-sm text-gray-600">性別</label>
                                                 <input type="radio" id="gender" name="gender" value="0"
-                                                    class="mr-2 ml-2">男性
+                                                    {{ old('gender') === 0 ? 'checked' : '' }} class="mr-2 ml-2">男性
                                                 <input type="radio" id="gender" name="gender" value="1"
-                                                    class="mr-2">女性
+                                                    {{ old('gender') === 1 ? 'checked' : '' }} class="mr-2">女性
                                             </div>
                                         </div>
                                         {{-- 年齢 --}}
@@ -75,7 +91,7 @@
                                                     @for ($i = 10; $i < 81; $i++)
                                                         <option value="{{ $i }}">{{ $i }}歳
                                                         </option>
-                                                    @endfor
+                                                    @endFor
 
                                                 </select>
                                             </div>
@@ -84,8 +100,8 @@
                                             <div class="relative">
                                                 <label for="contact"
                                                     class="leading-7 text-sm text-gray-600">お問い合わせ内容</label>
-                                                <textarea id="contact" name="contact"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                                                <textarea id="contact" name="contact" placeholder="ご意見ご感想などご自由にご記入ください"
+                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out">{{ old('contact') }}</textarea>
                                             </div>
                                         </div>
                                         {{-- お問い合わせ内容のINPUT --}}
@@ -108,16 +124,16 @@
                                 </svg>
                             </a>
                             <a class="ml-4 text-gray-500">
-                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
                                     <path
                                         d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
                                     </path>
                                 </svg>
                             </a>
                             <a class="ml-4 text-gray-500">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                                <svg fill="none" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
                                     <rect width="20" height="20" x="2" y="2" rx="5" ry="5">
                                     </rect>
                                     <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01">

@@ -94,9 +94,19 @@
                                     {{-- 戻るボタン --}}
                                     <div class="p-2 w-full">
                                         <button onclick="location.href='{{ route('contacts.index') }}'"
-                                            class="flex mx-auto text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">戻る</button>
+                                            class="flex mx-auto text-white bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg">戻る</button>
                                     </div>
-
+                                    {{-- 削除ボタン --}}
+                                    <form method="post"
+                                        action="{{ route('contacts.destroy', ['id' => $contact->id]) }}"
+                                        id="delete_{{ $contact->id }}">
+                                        @csrf
+                                        <div class="p-2 w-full">
+                                            <button type="button" deta-id ="{{ $contact->id }}"
+                                                onclick="deletePost(this)"
+                                                class="flex mx-auto text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">削除</button>
+                                        </div>
+                                    </form>
 
                                 </div>
                             </div>
@@ -107,4 +117,15 @@
             </div>
         </div>
     </div>
+    {{-- js --}}
+    <script>
+        function deletePost(e) {
+            'use strict'
+            if (confirm('本当に削除していいですか？')) {
+                document.getElementById('delete_' + e.dataset.id).submit()
+            } else {
+                //キャンセル処理
+            }
+        }
+    </script>
 </x-app-layout>

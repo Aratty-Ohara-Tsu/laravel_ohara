@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\ContactForm; //
+use App\Models\ContactForm; //storeメソッドで使用するモデルのインポート
+use App\Services\CheckFormService; // 自作のフォームチェック用の
+use App\Http\Requests\StoreContactRequest; //自作リクエストのインポート
 
 class ContactFormController extends Controller
 {
@@ -33,7 +35,7 @@ class ContactFormController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
         //フォームから送られてきたデータの確認
         // dd($request);
@@ -61,11 +63,12 @@ class ContactFormController extends Controller
         $contact = ContactForm::findOrFail($id);
 
         //性別の表記処理
-        if ($contact->gender === 0) {
-            $gender = '男性';
-        } else {
-            $gender = '女性';
-        }
+        // if ($contact->gender === 0) {
+        //     $gender = '男性';
+        // } else {
+        //     $gender = '女性';
+        // }
+        $gender = CheckFormService::checkGender($contact);
 
         return view("contacts.show", compact('contact', 'gender'));
     }
@@ -78,11 +81,12 @@ class ContactFormController extends Controller
         //
         $contact = ContactForm::findOrFail($id);
 
-        if ($contact->gender === 0) {
-            $gender = '男性';
-        } else {
-            $gender = '女性';
-        }
+        // if ($contact->gender === 0) {
+        //     $gender = '男性';
+        // } else {
+        //     $gender = '女性';
+        // }
+        $gender = CheckFormService::checkGender($contact);
 
         return view("contacts.edit", compact('contact', 'gender'));
     }
@@ -114,5 +118,9 @@ class ContactFormController extends Controller
     public function destroy(string $id)
     {
         //
+        $contact = ContactForm::findOrFail($id);
+        $contact->delete();
+
+        return to_route('contacts.index');
     }
 }
